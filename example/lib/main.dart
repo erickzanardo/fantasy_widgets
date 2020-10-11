@@ -5,6 +5,16 @@ import 'package:fantasy_widgets/fantasy_widgets.dart';
 void main() {
   final dashbook = Dashbook();
 
+  dashbook.storiesOf('FantasySelectableList').decorator(CenterDecorator())
+      ..add('default', (ctx) => FantasySelectableList(
+              width: ctx.numberProperty('width', 300),
+              height: ctx.numberProperty('height', 400),
+              initialItem: 0,
+              options: [
+                'Characters', 'Items', 'Gear', 'Quests', 'Options', 'Save',
+              ],
+      ));
+
   dashbook.storiesOf('FantasyContainer').decorator(CenterDecorator())
       ..add('default', (ctx) => FantasyContainer(
               width: ctx.numberProperty('width', 300),

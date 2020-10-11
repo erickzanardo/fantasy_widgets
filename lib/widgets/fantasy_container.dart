@@ -20,11 +20,13 @@ class FantasyContainer extends StatelessWidget {
   final FantasyContainerDecoration decoration;
   final double width;
   final double height;
+  final Widget child;
 
   FantasyContainer({
     this.decoration = const FantasyContainerDecoration(),
     this.width,
     this.height,
+    this.child,
   });
 
   @override
@@ -34,6 +36,10 @@ class FantasyContainer extends StatelessWidget {
         height: height,
         child: CustomPaint(
             painter: _FantasyContainerPainter(decoration),
+            child: Container(
+                padding: EdgeInsets.all(decoration.borderSize * 2),
+                child: child,
+            ),
         ),
     );
   }
