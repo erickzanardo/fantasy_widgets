@@ -110,31 +110,37 @@ class _FantasySelectableList extends State<FantasySelectableList> {
     return FantasyContainer(
       width: widget.width,
       height: widget.height,
-      child: Column(children: [
-        widget.title != null
-            ? FantasyLabel(widget.title, style: widget.titleStyle)
-            : Container(),
-        SingleChildScrollView(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: _keys.entries
-                  .map(
-                    (entry) => FantasyOption(entry.key,
-                        key: entry.value,
-                        selected: entry.key == _currentItem,
-                        labelStyle: widget.optionStyle, onTap: () {
-                      if (!widget.hasFocus) {
-                        return;
-                      }
-                      widget.onOptionSelect?.call(entry.key);
-                      setState(() {
-                        _currentItem = entry.key;
-                      });
-                    }),
-                  )
-                  ?.toList()),
-        ),
-      ]),
+      child: Opacity(
+        opacity: widget.hasFocus ? 1 : 0.2,
+        child: Column(children: [
+          widget.title != null
+              ? Padding(
+                  child: FantasyLabel(widget.title, style: widget.titleStyle),
+                  padding: EdgeInsets.only(bottom: widget.titleStyle.size),
+              )
+              : Container(),
+          SingleChildScrollView(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: _keys.entries
+                    .map(
+                      (entry) => FantasyOption(entry.key,
+                          key: entry.value,
+                          selected: entry.key == _currentItem,
+                          labelStyle: widget.optionStyle, onTap: () {
+                        if (!widget.hasFocus) {
+                          return;
+                        }
+                        widget.onOptionSelect?.call(entry.key);
+                        setState(() {
+                          _currentItem = entry.key;
+                        });
+                      }),
+                    )
+                    ?.toList()),
+          ),
+        ]),
+      ),
     );
   }
 }

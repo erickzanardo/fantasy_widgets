@@ -119,7 +119,7 @@ class _SaveMenuExampleState extends State<SaveMenuExample> {
               hasFocus: true,
               initialItem: 0,
               width: 280,
-              height: 200,
+              height: 170,
               onOptionSelect: (option) {
                 _hideMenu();
                 _hideSaveMenu();
