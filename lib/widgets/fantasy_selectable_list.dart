@@ -117,7 +117,7 @@ class _FantasySelectableList extends State<FantasySelectableList> {
               ? Padding(
                   child: FantasyLabel(widget.title, style: widget.titleStyle),
                   padding: EdgeInsets.only(bottom: widget.titleStyle.size),
-              )
+                )
               : Container(),
           SingleChildScrollView(
             child: Column(
