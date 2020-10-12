@@ -11,7 +11,14 @@ void main() {
               height: ctx.numberProperty('height', 400),
               initialItem: 0,
               options: [
-                'Characters', 'Items', 'Gear', 'Quests', 'Options', 'Save',
+                'Characters',
+                'Quest',
+                'Items',
+                'Magic',
+                'Gear',
+                'Quests',
+                'Options',
+                'Save',
               ],
       ));
 

@@ -13,23 +13,23 @@ class FantasyLabelStyle {
 }
 
 class FantasyLabel extends StatelessWidget {
-
   final FantasyLabelStyle style;
   final String text;
 
-  FantasyLabel(this.text, {
+  FantasyLabel(
+    this.text, {
     this.style = const FantasyLabelStyle(),
   });
 
   @override
   Widget build(_) {
     return Text(
-        text,
-        style: TextStyle(
-            color: style.color,
-            fontFamily: style.family,
-            fontSize: style.size,
-        ),
+      text,
+      style: TextStyle(
+        color: style.color,
+        fontFamily: style.family,
+        fontSize: style.size,
+      ),
     );
   }
 }
