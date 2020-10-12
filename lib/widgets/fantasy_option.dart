@@ -20,21 +20,22 @@ class FantasyOption extends StatelessWidget {
   @override
   Widget build(_) {
     return GestureDetector(
-        onTap: () {
-          onTap?.call();
-        },
-        child: Row(
-            children: [
-              SizedBox(
-                  width: labelStyle.size,
-                  height: labelStyle.size,
-                  child:
-                  selected ? Icon(Icons.play_arrow, color: labelStyle.color) : null,
-              ),
-              SizedBox(width: 10),
-              FantasyLabel(label, style: labelStyle),
-            ],
-        ),
+      onTap: () {
+        onTap?.call();
+      },
+      child: Row(
+        children: [
+          SizedBox(
+            width: labelStyle.size,
+            height: labelStyle.size,
+            child: selected
+                ? Icon(Icons.play_arrow, color: labelStyle.color)
+                : null,
+          ),
+          SizedBox(width: 10),
+          FantasyLabel(label, style: labelStyle),
+        ],
+      ),
     );
   }
 }

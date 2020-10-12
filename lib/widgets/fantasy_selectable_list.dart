@@ -6,20 +6,30 @@ import './fantasy_option.dart';
 import './fantasy_label.dart';
 
 class FantasySelectableList extends StatefulWidget {
+  final String title;
+  final FantasyLabelStyle titleStyle;
   final FantasyContainerDecoration decoration;
   final FantasyLabelStyle optionStyle;
   final List<String> options;
   final int initialItem;
   final double width;
   final double height;
+  final void Function(String) onOptionSelect;
+  final LogicalKeyboardKey selectKey;
+  final bool hasFocus;
 
   FantasySelectableList({
+    this.title,
+    this.titleStyle = const FantasyLabelStyle(),
     this.width,
     this.height,
     this.decoration = const FantasyContainerDecoration(),
     this.optionStyle = const FantasyLabelStyle(),
     this.options = const [],
     this.initialItem,
+    this.onOptionSelect,
+    this.selectKey = LogicalKeyboardKey.space,
+    this.hasFocus = true,
   });
 
   @override
@@ -59,11 +69,17 @@ class _FantasySelectableList extends State<FantasySelectableList> {
   }
 
   void _onKey(RawKeyEvent event) {
+    if (!widget.hasFocus) {
+      return;
+    }
+
     if (event is RawKeyUpEvent) {
       final i = _currentIndex();
       String nextOption;
 
-      if (event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId ||
+      if (event.logicalKey.keyId == widget.selectKey.keyId) {
+        widget.onOptionSelect?.call(_currentItem);
+      } else if (event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId ||
           event.logicalKey.keyId == LogicalKeyboardKey.arrowDown.keyId) {
         if (event.logicalKey.keyId == LogicalKeyboardKey.arrowUp.keyId) {
           if (i == 0) {
@@ -82,7 +98,7 @@ class _FantasySelectableList extends State<FantasySelectableList> {
         setState(() {
           _currentItem = nextOption;
           Scrollable.ensureVisible(
-              _keys[_currentItem].currentContext,
+            _keys[_currentItem].currentContext,
           );
         });
       }
@@ -94,25 +110,31 @@ class _FantasySelectableList extends State<FantasySelectableList> {
     return FantasyContainer(
       width: widget.width,
       height: widget.height,
-      child: SingleChildScrollView(
+      child: Column(children: [
+        widget.title != null
+            ? FantasyLabel(widget.title, style: widget.titleStyle)
+            : Container(),
+        SingleChildScrollView(
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: _keys.entries
                   .map(
-                    (entry) => FantasyOption(
-                      entry.key,
-                      key: entry.value,
-                      selected: entry.key == _currentItem,
-                      labelStyle: widget.optionStyle,
-                      onTap: () {
-                        setState(() {
-                          _currentItem = entry.key;
-                        });
+                    (entry) => FantasyOption(entry.key,
+                        key: entry.value,
+                        selected: entry.key == _currentItem,
+                        labelStyle: widget.optionStyle, onTap: () {
+                      if (!widget.hasFocus) {
+                        return;
                       }
-                    ),
+                      widget.onOptionSelect?.call(entry.key);
+                      setState(() {
+                        _currentItem = entry.key;
+                      });
+                    }),
                   )
                   ?.toList()),
-      ),
+        ),
+      ]),
     );
   }
 }
