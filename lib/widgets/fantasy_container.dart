@@ -20,21 +20,27 @@ class FantasyContainer extends StatelessWidget {
   final FantasyContainerDecoration decoration;
   final double width;
   final double height;
+  final Widget child;
 
   FantasyContainer({
     this.decoration = const FantasyContainerDecoration(),
     this.width,
     this.height,
+    this.child,
   });
 
   @override
   Widget build(_) {
     return Container(
-        width: width,
-        height: height,
-        child: CustomPaint(
-            painter: _FantasyContainerPainter(decoration),
+      width: width,
+      height: height,
+      child: CustomPaint(
+        painter: _FantasyContainerPainter(decoration),
+        child: Container(
+          padding: EdgeInsets.all(decoration.borderSize * 2),
+          child: child,
         ),
+      ),
     );
   }
 }
@@ -45,28 +51,29 @@ class _FantasyContainerPainter extends CustomPainter {
   _FantasyContainerPainter(this.decoration);
 
   @override
-  bool shouldRepaint(_FantasyContainerPainter painter) => decoration != painter.decoration;
-
+  bool shouldRepaint(_FantasyContainerPainter painter) =>
+      decoration != painter.decoration;
 
   @override
   void paint(Canvas canvas, Size size) {
     final borderSize = decoration.borderSize;
     final rrect = RRect.fromRectAndRadius(
-        Rect.fromLTWH(borderSize, borderSize, size.width - borderSize * 2, size.height - borderSize * 2),
-        decoration.borderRadius,
+      Rect.fromLTWH(borderSize, borderSize, size.width - borderSize * 2,
+          size.height - borderSize * 2),
+      decoration.borderRadius,
     );
 
     canvas.drawRRect(
-        rrect,
-        Paint()
+      rrect,
+      Paint()
         ..color = decoration.borderColor
         ..strokeWidth = decoration.borderSize
         ..style = PaintingStyle.stroke,
     );
 
     canvas.drawRRect(
-        rrect,
-        Paint()
+      rrect,
+      Paint()
         ..color = decoration.borderColorShadow
         ..strokeWidth = decoration.borderSize / 2
         ..style = PaintingStyle.stroke,
