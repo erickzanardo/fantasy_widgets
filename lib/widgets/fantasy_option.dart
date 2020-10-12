@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'fantasy_label.dart';
+import 'fantasy_bullet.dart';
 
 class FantasyOption extends StatelessWidget {
   final Key key;
@@ -25,12 +26,10 @@ class FantasyOption extends StatelessWidget {
       },
       child: Row(
         children: [
-          SizedBox(
-            width: labelStyle.size,
-            height: labelStyle.size,
-            child: selected
-                ? Icon(Icons.play_arrow, color: labelStyle.color)
-                : null,
+          FantasyBullet(
+            Icons.play_arrow,
+            style: labelStyle,
+            visible: selected,
           ),
           SizedBox(width: 10),
           FantasyLabel(label, style: labelStyle),

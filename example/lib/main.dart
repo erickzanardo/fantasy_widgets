@@ -7,6 +7,9 @@ import './save_menu_example.dart';
 void main() {
   final dashbook = Dashbook();
 
+  dashbook.storiesOf('Examples').decorator(CenterDecorator())
+    ..add('save menu', (_) => SaveMenuExample());
+
   dashbook.storiesOf('FantasyTextBox').decorator(CenterDecorator())
     ..add(
       'default',
@@ -54,9 +57,6 @@ void main() {
                     Radius.circular(ctx.numberProperty('border radius', 10)),
               ),
             ));
-
-  dashbook.storiesOf('Examples').decorator(CenterDecorator())
-    ..add('save menu', (_) => SaveMenuExample());
 
   runApp(dashbook);
 }

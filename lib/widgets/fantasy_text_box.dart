@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'fantasy_container.dart';
 import 'fantasy_label.dart';
+import 'fantasy_bullet.dart';
 
 class FantasyTextBox extends StatefulWidget {
   final double width;
@@ -43,34 +44,36 @@ class _FantasyTextBoxState extends State<FantasyTextBox> {
   }
 
   void _handleEvent(RawKeyEvent event) {
-    if (event is RawKeyUpEvent && event.logicalKey.keyId == widget.closeKey.keyId) {
+    if (event is RawKeyUpEvent &&
+        event.logicalKey.keyId == widget.closeKey.keyId) {
       widget.onClose?.call();
     }
   }
 
   @override
   Widget build(_) {
-    return FantasyContainer(
-      width: widget.width,
-      height: widget.height,
-      child: Stack(
-        children: [
-          FantasyLabel(
-            widget.text,
-            style: widget.textStyle,
-          ),
-          Positioned(
+    return GestureDetector(
+      onTap: widget.onClose,
+      child: FantasyContainer(
+        width: widget.width,
+        height: widget.height,
+        child: Stack(
+          children: [
+            FantasyLabel(
+              widget.text,
+              style: widget.textStyle,
+            ),
+            Positioned(
               bottom: 0,
               right: 0,
-              child: SizedBox(
-                  child: Icon(
-                      Icons.arrow_drop_down,
-                      size: widget.textStyle.size,
-                      color: widget.textStyle.color,
-                  ),
+              child: FantasyBullet(
+                Icons.arrow_drop_down,
+                blinkInterval: Duration(seconds: 1),
+                style: widget.textStyle,
               ),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

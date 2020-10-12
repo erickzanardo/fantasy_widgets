@@ -13,6 +13,7 @@ class SaveMenuExample extends StatefulWidget {
 class _SaveMenuExampleState extends State<SaveMenuExample> {
   bool _optionMenuOpen = false;
   bool _saveMenuOpen = false;
+  bool _infoOpen = false;
 
   void _openMenu() {
     setState(() {
@@ -35,6 +36,18 @@ class _SaveMenuExampleState extends State<SaveMenuExample> {
   void _hideSaveMenu() {
     setState(() {
       _saveMenuOpen = false;
+    });
+  }
+
+  void _openInfo() {
+    setState(() {
+      _infoOpen = true;
+    });
+  }
+
+  void _hideInfo() {
+    setState(() {
+      _infoOpen = false;
     });
   }
 
@@ -89,7 +102,7 @@ class _SaveMenuExampleState extends State<SaveMenuExample> {
               initialItem: 0,
               width: 280,
               height: 230,
-              hasFocus: _optionMenuOpen && !_saveMenuOpen,
+              hasFocus: _optionMenuOpen && !_saveMenuOpen && !_infoOpen,
               onOptionSelect: (option) {
                 if (option == 'Resume game') {
                   _hideMenu();
@@ -116,17 +129,36 @@ class _SaveMenuExampleState extends State<SaveMenuExample> {
             _saveMenuOpen,
             FantasySelectableList(
               title: 'Save your progress?',
-              hasFocus: true,
+              hasFocus: _saveMenuOpen && !_infoOpen,
               initialItem: 0,
               width: 280,
               height: 170,
               onOptionSelect: (option) {
-                _hideMenu();
-                _hideSaveMenu();
+                if (option == 'No') {
+                  _hideMenu();
+                  _hideSaveMenu();
+                } else {
+                  _openInfo();
+                }
               },
               options: ['No', 'Yes'],
             ),
           ),
+        ),
+        Positioned.fill(
+          child: _if(
+              _infoOpen,
+              Center(
+                child: FantasyTextBox(
+                  'Game Saved',
+                  width: 200,
+                  onClose: () {
+                    _hideSaveMenu();
+                    _hideMenu();
+                    _hideInfo();
+                  },
+                ),
+              )),
         ),
       ],
     );
