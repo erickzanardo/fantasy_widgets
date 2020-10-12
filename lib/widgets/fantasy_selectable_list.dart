@@ -104,6 +104,11 @@ class _FantasySelectableList extends State<FantasySelectableList> {
                       key: entry.value,
                       selected: entry.key == _currentItem,
                       labelStyle: widget.optionStyle,
+                      onTap: () {
+                        setState(() {
+                          _currentItem = entry.key;
+                        });
+                      }
                     ),
                   )
                   ?.toList()),
