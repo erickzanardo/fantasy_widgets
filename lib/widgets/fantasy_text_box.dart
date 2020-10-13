@@ -12,6 +12,7 @@ class FantasyTextBox extends StatefulWidget {
   final String text;
   final VoidCallback onClose;
   final LogicalKeyboardKey closeKey;
+  final Duration wordStepTime;
 
   FantasyTextBox(
     this.text, {
@@ -20,6 +21,7 @@ class FantasyTextBox extends StatefulWidget {
     this.textStyle = const FantasyLabelStyle(),
     this.onClose,
     this.closeKey = LogicalKeyboardKey.space,
+    this.wordStepTime = const Duration(milliseconds: 200),
   });
 
   @override
@@ -28,10 +30,40 @@ class FantasyTextBox extends StatefulWidget {
   }
 }
 
-class _FantasyTextBoxState extends State<FantasyTextBox> {
+class _FantasyTextBoxState extends State<FantasyTextBox> with SingleTickerProviderStateMixin {
+  AnimationController controller;
+
+  List<String> _textQueue;
+  String _text;
+  bool _finished;
+
   @override
   void initState() {
     super.initState();
+
+    if (widget.wordStepTime != null) {
+      _finished = false;
+      _text = "";
+      _textQueue = widget.text.split(' ');
+
+      controller = AnimationController(
+        vsync: this,
+        duration: widget.wordStepTime,
+      )
+        ..addStatusListener((status) {
+          if (status == AnimationStatus.completed) {
+            controller.reverse();
+            _tick();
+          } else if (status == AnimationStatus.dismissed) {
+            controller.forward();
+            _tick();
+          }
+        })
+        ..forward();
+    } else {
+      _finished = true;
+      _text = widget.text;
+    }
 
     RawKeyboard.instance.addListener(_handleEvent);
   }
@@ -43,8 +75,21 @@ class _FantasyTextBoxState extends State<FantasyTextBox> {
     RawKeyboard.instance.removeListener(_handleEvent);
   }
 
+  void _tick() {
+    if (_textQueue.isEmpty) {
+      setState(() {
+        _finished = true;
+        controller.stop();
+      });
+    } else {
+      setState(() {
+        _text = '$_text ${_textQueue.removeAt(0)}';
+      });
+    }
+  }
+
   void _handleEvent(RawKeyEvent event) {
-    if (event is RawKeyUpEvent &&
+    if (_finished && event is RawKeyUpEvent &&
         event.logicalKey.keyId == widget.closeKey.keyId) {
       widget.onClose?.call();
     }
@@ -53,24 +98,28 @@ class _FantasyTextBoxState extends State<FantasyTextBox> {
   @override
   Widget build(_) {
     return GestureDetector(
-      onTap: widget.onClose,
+      onTap: () {
+        if (_finished) {
+          widget.onClose?.call();
+        }
+      },
       child: FantasyContainer(
         width: widget.width,
         height: widget.height,
         child: Stack(
           children: [
             FantasyLabel(
-              widget.text,
+              _text,
               style: widget.textStyle,
             ),
             Positioned(
               bottom: 0,
               right: 0,
-              child: FantasyBullet(
+              child: _finished ? FantasyBullet(
                 Icons.arrow_drop_down,
                 blinkInterval: Duration(seconds: 1),
                 style: widget.textStyle,
-              ),
+              ) : Container(),
             ),
           ],
         ),

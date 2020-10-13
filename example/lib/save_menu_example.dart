@@ -151,7 +151,7 @@ class _SaveMenuExampleState extends State<SaveMenuExample> {
               Center(
                 child: FantasyTextBox(
                   'Game Saved',
-                  width: 200,
+                  width: 220,
                   onClose: () {
                     _hideSaveMenu();
                     _hideMenu();
