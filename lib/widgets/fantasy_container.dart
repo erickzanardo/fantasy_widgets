@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'fantasy_widget_theme.dart';
 
 class FantasyContainerDecoration {
   final double borderSize;
@@ -23,21 +24,22 @@ class FantasyContainer extends StatelessWidget {
   final Widget child;
 
   FantasyContainer({
-    this.decoration = const FantasyContainerDecoration(),
+    this.decoration,
     this.width,
     this.height,
     this.child,
   });
 
   @override
-  Widget build(_) {
+  Widget build(ctx) {
+    final _decoration = decoration ?? FantasyWidgetTheme.of(ctx).containerStyle;
     return Container(
       width: width,
       height: height,
       child: CustomPaint(
-        painter: _FantasyContainerPainter(decoration),
+        painter: _FantasyContainerPainter(_decoration),
         child: Container(
-          padding: EdgeInsets.all(decoration.borderSize * 2),
+          padding: EdgeInsets.all(_decoration.borderSize * 2),
           child: child,
         ),
       ),

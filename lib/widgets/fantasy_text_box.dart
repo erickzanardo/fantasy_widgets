@@ -30,7 +30,8 @@ class FantasyTextBox extends StatefulWidget {
   }
 }
 
-class _FantasyTextBoxState extends State<FantasyTextBox> with SingleTickerProviderStateMixin {
+class _FantasyTextBoxState extends State<FantasyTextBox>
+    with SingleTickerProviderStateMixin {
   AnimationController controller;
 
   List<String> _textQueue;
@@ -89,7 +90,8 @@ class _FantasyTextBoxState extends State<FantasyTextBox> with SingleTickerProvid
   }
 
   void _handleEvent(RawKeyEvent event) {
-    if (_finished && event is RawKeyUpEvent &&
+    if (_finished &&
+        event is RawKeyUpEvent &&
         event.logicalKey.keyId == widget.closeKey.keyId) {
       widget.onClose?.call();
     }
@@ -115,11 +117,13 @@ class _FantasyTextBoxState extends State<FantasyTextBox> with SingleTickerProvid
             Positioned(
               bottom: 0,
               right: 0,
-              child: _finished ? FantasyBullet(
-                Icons.arrow_drop_down,
-                blinkInterval: Duration(seconds: 1),
-                style: widget.textStyle,
-              ) : Container(),
+              child: _finished
+                  ? FantasyBullet(
+                      Icons.arrow_drop_down,
+                      blinkInterval: Duration(seconds: 1),
+                      style: widget.textStyle,
+                    )
+                  : Container(),
             ),
           ],
         ),
